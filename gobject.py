@@ -22,9 +22,8 @@ class game_ctrl :
 class game_object :
     global gctrl
 
-    def __init__(self, x, y, resource_id) :
-        if resource_id != None :
-            resource_path = gresource.get_resource(resource_id)
+    def __init__(self, x, y, resource_path) :
+        if resource_path != None :
             self.object = pygame.image.load(resource_path)
             self.width = self.object.get_width()
             self.height = self.object.get_height()
@@ -103,8 +102,7 @@ class game_object :
         return False
 
 class backgroud_object(game_object) :
-    def __init__(self, resource_id) :
-        resource_path = gresource.get_resource(resource_id)
+    def __init__(self, resource_path) :
         self.object = pygame.image.load(resource_path)
         self.object2 = self.object.copy()
 
