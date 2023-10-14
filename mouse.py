@@ -19,10 +19,8 @@ MOUSE_MOVE_UP = 8
 
 class mouse_object :
     def __init__(self, maze) :
-        self.x = 0
-        self.y = 0
-        self.dir = MOUSE_MOVE_UP
         self.maze = maze
+        self.rows, self.cols = self.maze.get_size()
 
         self.goal_count = 0
         self.goals = []
@@ -32,19 +30,31 @@ class mouse_object :
         self.goals.append([self.maze.cols / 2, self.maze.rows / 2])
 
         self.trace = []
+        self.branch = []
+        self.map = []
+        
+        self.init_variables()
+
+    def init_variables(self) :
+        self.x = 0
+        self.y = 0
+        self.dir = MOUSE_MOVE_UP
+
+        self.trace.clear()
         self.trace.append([self.x, self.y])
 
-        self.branch = []
+        self.branch.clear()
 
-        self.map = []
+        self.map.clear()
         self.rows, self.cols = self.maze.get_size()
-        for y in range(self.rows) :
+        for x in range(self.cols) :
             self.map.append([])
-            for x in range(self.cols) :
-                self.map[y].append(0)
+            for y in range(self.rows) :
+                self.map[x].append(0)
 
+        self.goal_count = 0
         self.goto_start = False
-
+        
     def update_map(self, x, y, wall) :
         self.map[x][y] = wall
 

@@ -161,6 +161,7 @@ def run_mouse_auto() :
     global maze, mouse
 
     maze.load()
+    mouse.init_variables()
 
     simulation_end = False
     auto = True

@@ -34,22 +34,22 @@ class maze_object :
         self.rows = rows
         self.cols = cols
         
-        for y in range(rows) :
+        for x in range(cols) :
             self.maze.append([])
-            for x in range(cols) :
-                self.maze[y].append(WALL_ALL)
+            for y in range(rows) :
+                self.maze[x].append(WALL_ALL)
 
     def get_size(self) :
         return self.rows, self.cols
 
     def get_padsize(self) :
-        pad_width = 2 * MAZE_XOFFSET + (MAX_COLS + 1) * MAZE_WIDTH
-        pad_height = 2 * MAZE_YOFFSET + (MAX_ROWS + 1) * MAZE_HEIGHT
+        pad_width = 2 * MAZE_XOFFSET + (self.cols + 1) * MAZE_WIDTH
+        pad_height = 2 * MAZE_YOFFSET + (self.rows + 1) * MAZE_HEIGHT
         return (pad_width, pad_height) 
 
     def get_maze_rect(self, x, y) :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
-        maze_rect.y += MAX_ROWS * MAZE_HEIGHT 
+        maze_rect.y += self.rows * MAZE_HEIGHT 
 
         maze_rect.x += x * MAZE_WIDTH
         maze_rect.y -= y * MAZE_HEIGHT
@@ -62,9 +62,9 @@ class maze_object :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
 
         # maze[0][0] is left and bottom
-        maze_rect.y += MAX_ROWS * MAZE_HEIGHT 
-        for y in range(MAX_ROWS) :
-            for x in range(MAX_COLS) :
+        maze_rect.y += self.rows * MAZE_HEIGHT 
+        for y in range(self.rows) :
+            for x in range(self.cols) :
                 if self.maze[x][y] & WALL_LEFT :
                     pygame.draw.line(gctrl.gamepad, WALL_COLOR, (maze_rect.left, maze_rect.top), (maze_rect.left, maze_rect.bottom), WALL_WIDTH)
                 if self.maze[x][y] & WALL_BOTTOM :
@@ -100,8 +100,8 @@ class maze_object :
             #for header in header:
             #    file.write(str(header)+', ')
             #file.write('n')
-            for y in range(MAX_ROWS):
-                for x in range(MAX_COLS-1):
+            for y in range(self.rows):
+                for x in range(self.cols-1):
                     file.write(str(self.maze[x][y])+', ')
                 file.write(str(self.maze[x+1][y]))
                 file.write('\n')
@@ -111,13 +111,13 @@ class maze_object :
             if wall == WALL_LEFT and x > 0 :
                 self.maze[x][y] ^= wall 
                 self.maze[x-1][y] ^= WALL_RIGHT
-            if wall == WALL_RIGHT and x < (MAX_COLS - 1) :
+            if wall == WALL_RIGHT and x < (self.cols - 1) :
                 self.maze[x][y] ^= wall
                 self.maze[x+1][y] ^= WALL_LEFT
             if wall == WALL_BOTTOM and y > 0 :
                 self.maze[x][y] ^= wall
                 self.maze[x][y-1] ^= WALL_TOP
-            if wall == WALL_TOP and y < (MAX_ROWS - 1) :
+            if wall == WALL_TOP and y < (self.rows - 1) :
                 self.maze[x][y] ^= wall
                 self.maze[x][y+1] ^= WALL_BOTTOM
 
