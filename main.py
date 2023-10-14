@@ -11,14 +11,11 @@ from time import sleep
 from tkinter import filedialog
 from tkinter import *
 
+from gresource import *
 from gobject import *
+from cursor import *
 from maze import *
 from mouse import *
-
-COLOR_BLACK = (0, 0, 0)
-COLOR_WHITE = (255, 255, 255)
-COLOR_RED = (255, 0, 0)
-COLOR_BLUE = (0, 0, 255)
 
 def draw_step(count) :
     font = pygame.font.SysFont(None, 25)
@@ -48,8 +45,11 @@ def edit_maze() :
     global clock
     global maze
 
-    x = 0
-    y = 0
+    cursor = cursor_object(maze)
+
+    cursor.x = 0
+    cursor.y = 0
+    direction =0
 
     edit_wall = 0
     edit_exit = False
@@ -60,21 +60,13 @@ def edit_maze() :
 
             if event.type == pygame.KEYUP :
                 if event.key == pygame.K_UP:
-                    y += 1
-                    if y >= MAX_ROWS :
-                        y = MAX_ROWS - 1
+                    direction = CURSOR_MOVE_UP
                 elif event.key == pygame.K_DOWN :
-                    y -= 1
-                    if y < 0 :
-                        y = 0
+                    direction = CURSOR_MOVE_DOWN
                 elif event.key == pygame.K_LEFT :
-                    x -= 1
-                    if x < 0 :
-                        x = 0
+                    direction = CURSOR_MOVE_LEFT
                 elif event.key == pygame.K_RIGHT :
-                    x += 1
-                    if x >= MAX_COLS :
-                        x = MAX_COLS - 1
+                    direction = CURSOR_MOVE_RIGHT
                 elif event.key == pygame.K_a:
                     edit_wall = WALL_LEFT
                 elif event.key == pygame.K_s :
@@ -90,8 +82,12 @@ def edit_maze() :
                 elif event.key == pygame.K_x :
                     return
 
+        # Move cursor
+        cursor.move(direction)
+        direction = 0
+
         # Change wall
-        maze.edit_wall(x, y, edit_wall)
+        maze.edit_wall(cursor.x, cursor.y, edit_wall)
         edit_wall = 0
             
         # Clear gamepad
@@ -101,11 +97,10 @@ def edit_maze() :
         maze.draw()
 
         # Draw cursor
-        draw_cursor(x, y)
+        cursor.draw_circle(COLOR_BLACK)
 
         pygame.display.update()
         clock.tick(60)
-
 
 def run_mouse() :
     global clock
