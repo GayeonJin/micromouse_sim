@@ -49,10 +49,10 @@ class maze_object :
 
     def get_maze_rect(self, x, y) :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
-        maze_rect.y += self.rows * MAZE_HEIGHT 
 
+        # maze[0][0] is left and bottom
         maze_rect.x += x * MAZE_WIDTH
-        maze_rect.y -= y * MAZE_HEIGHT
+        maze_rect.y += (self.rows - y) * MAZE_HEIGHT
         return maze_rect        
 
     def get_wall(self, x, y) :
@@ -61,7 +61,6 @@ class maze_object :
     def draw(self) :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
 
-        # maze[0][0] is left and bottom
         maze_rect.y += self.rows * MAZE_HEIGHT 
         for y in range(self.rows) :
             for x in range(self.cols) :

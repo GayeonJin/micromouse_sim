@@ -79,12 +79,14 @@ def edit_maze() :
                     return
 
         # Move cursor
-        cursor.move(direction)
-        direction = 0
+        if direction != 0 :
+            cursor.move(direction)
+            direction = 0
 
         # Change wall
-        maze.edit_wall(cursor.x, cursor.y, edit_wall)
-        edit_wall = 0
+        if edit_wall != 0 : 
+            maze.edit_wall(cursor.x, cursor.y, edit_wall)
+            edit_wall = 0
             
         # Clear gamepad
         gctrl.gamepad.fill(COLOR_WHITE)
