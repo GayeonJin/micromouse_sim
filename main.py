@@ -36,10 +36,6 @@ def terminate() :
     pygame.quit()
     sys.exit()
 
-def draw_cursor(x, y) :
-    maze_rect = maze.get_maze_rect(x, y)
-    pygame.draw.circle(gctrl.gamepad, COLOR_BLACK, maze_rect.center, MOUSE_SIZE, 2)
-
 def edit_maze() :
     global root
     global clock
