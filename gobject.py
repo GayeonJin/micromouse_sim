@@ -5,9 +5,6 @@ import pygame
 import random
 from time import sleep
 
-INIT_POS_LEFT = 0
-INIT_POS_RIGHT = 1
-
 class game_ctrl :
     def __init(self) :
         self.gamepad = None 
@@ -36,12 +33,6 @@ class game_object :
 
         self.life_count = 1
 
-    def init_position(self, mode) :
-        if mode == INIT_POS_LEFT :
-            self.set_position(gctrl.pad_width * 0.05, gctrl.pad_height / 2)
-        elif mode == INIT_POS_RIGHT :
-            self.set_position(gctrl.pad_width, random.randrange(0, gctrl.pad_height - self.height))
-
     def set_position(self, x, y) : 
         self.x = x
         self.y = y        
@@ -63,6 +54,14 @@ class game_object :
     def draw(self) :
         if self.object != None :
             gctrl.gamepad.blit(self.object, (self.x, self.y))            
+
+    def draw_rect(self, rect, rotate) :
+        if self.object != None :
+            if rotate != 0 :
+                rotate_img = pygame.transform.rotate(self.object, rotate)
+                gctrl.gamepad.blit(rotate_img, rect)
+            else :
+                gctrl.gamepad.blit(self.object, rect)
 
     def is_out_of_range(self) :
         if self.x <= 0 or self.x >= gctrl.pad_width :
@@ -96,36 +95,8 @@ class game_object :
         if self.object != None and enemy_item.object != None :
             if self.ex > enemy_item.x :
                 if (self.y > enemy_item.y and self.y < enemy_item.ey) or (self.ey > enemy_item.y and self.ey < enemy_item.ey) :
-                    #print("crashed1 : ",  self.x, self.y, self.ex, self.ey)
-                    #print("crashed2 : ",  enemy_item.x, enemy_item.y, enemy_item.ex, enemy_item.ey)
                     return True
         return False
-
-class backgroud_object(game_object) :
-    def __init__(self, resource_path) :
-        self.object = pygame.image.load(resource_path)
-        self.object2 = self.object.copy()
-
-        self.width = self.object.get_width()
-        self.height = self.object.get_height()
-
-        self.x = 0
-        self.x2 = self.width
-        self.scroll_width = -2
-
-    def scroll(self) :
-        self.x += self.scroll_width
-        self.x2 += self.scroll_width
-
-        if self.x == -self.width:
-            self.x = self.width
-
-        if self.x2 == -self.width:
-            self.x2 = self.width
-
-    def draw(self) :
-        gctrl.gamepad.blit(self.object, (self.x, 0))
-        gctrl.gamepad.blit(self.object2, (self.x2, 0))
 
 gctrl = game_ctrl()
 

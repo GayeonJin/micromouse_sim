@@ -17,6 +17,9 @@ MOUSE_MOVE_DOWN = 2
 MOUSE_MOVE_RIGHT = 4
 MOUSE_MOVE_UP = 8
 
+MOUSE_TYPE_CIRCLE = 1
+MOUSE_TYPE_IMG = 2
+
 class mouse_object :
     def __init__(self, maze) :
         self.maze = maze
@@ -33,6 +36,8 @@ class mouse_object :
         self.branch = []
         self.map = []
         
+        self.mouse_obj = game_object(0, 0, 'image/mouse.png')
+
         self.init_variables()
 
     def init_variables(self) :
@@ -247,6 +252,22 @@ class mouse_object :
         else :
             return False
 
+    def draw_mouse(self, type = MOUSE_TYPE_CIRCLE, color = COLOR_BLACK) :
+        maze_rect = self.maze.get_maze_rect(self.x, self.y)
+
+        if type == MOUSE_TYPE_CIRCLE :
+            pygame.draw.circle(gctrl.gamepad, color, maze_rect.center, MOUSE_SIZE, 2)
+        elif type == MOUSE_TYPE_IMG :
+            rotate_angle = 0
+            if self.dir == MOUSE_MOVE_LEFT :
+                rotate_angle = 90
+            elif self.dir == MOUSE_MOVE_RIGHT :
+                rotate_angle = 270
+            elif self.dir == MOUSE_MOVE_DOWN :
+                rotate_angle = 180
+
+            self.mouse_obj.draw_rect(maze_rect, rotate_angle)
+
     def draw_map_prohibit(self) :
         for y in range(self.rows) :
             for x in range(self.cols) :
@@ -257,9 +278,10 @@ class mouse_object :
     def draw(self) :
         maze_rect = self.maze.get_maze_rect(self.x, self.y)
         if self.goto_start == False :
-            pygame.draw.circle(gctrl.gamepad, COLOR_BLACK, maze_rect.center, MOUSE_SIZE, 2)
+            self.draw_mouse(MOUSE_TYPE_IMG)
         else :
-            pygame.draw.circle(gctrl.gamepad, COLOR_RED, maze_rect.center, MOUSE_SIZE, 2)
+            # self.draw_mouse(MOUSE_TYPE_CIRCLE, COLOR_RED)
+            self.draw_mouse(MOUSE_TYPE_IMG)
 
 if __name__ == '__main__' :
     print('mouse object')

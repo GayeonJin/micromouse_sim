@@ -15,8 +15,8 @@ MAX_COLS = 16
 MAZE_XOFFSET = 10
 MAZE_YOFFSET = 10
 
-MAZE_WIDTH = 30
-MAZE_HEIGHT = 30
+MAZE_WIDTH = 50
+MAZE_HEIGHT = 50
 
 WALL_LEFT = 0x01
 WALL_BOTTOM = 0x02
@@ -43,8 +43,8 @@ class maze_object :
         return self.rows, self.cols
 
     def get_padsize(self) :
-        pad_width = 2 * MAZE_XOFFSET + (self.cols + 1) * MAZE_WIDTH
-        pad_height = 2 * MAZE_YOFFSET + (self.rows + 1) * MAZE_HEIGHT
+        pad_width = 2 * MAZE_XOFFSET + self.cols * MAZE_WIDTH
+        pad_height = 2 * MAZE_YOFFSET + self.rows * MAZE_HEIGHT
         return (pad_width, pad_height) 
 
     def get_maze_rect(self, x, y) :
@@ -52,7 +52,7 @@ class maze_object :
 
         # maze[0][0] is left and bottom
         maze_rect.x += x * MAZE_WIDTH
-        maze_rect.y += (self.rows - y) * MAZE_HEIGHT
+        maze_rect.y += ((self.rows - 1) - y) * MAZE_HEIGHT
         return maze_rect        
 
     def get_wall(self, x, y) :
@@ -61,7 +61,7 @@ class maze_object :
     def draw(self) :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
 
-        maze_rect.y += self.rows * MAZE_HEIGHT 
+        maze_rect.y += (self.rows - 1) * MAZE_HEIGHT 
         for y in range(self.rows) :
             for x in range(self.cols) :
                 if self.maze[x][y] & WALL_LEFT :

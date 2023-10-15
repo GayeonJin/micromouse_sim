@@ -260,6 +260,8 @@ def init_mouse() :
     # maze
     maze = maze_object(MAX_ROWS, MAX_COLS)
     (pad_width, pad_height) = maze.get_padsize()
+
+    # mouse
     mouse = mouse_object(maze)
 
     gctrl.set_param(pygame.display.set_mode((pad_width, pad_height)), pad_width, pad_height)
