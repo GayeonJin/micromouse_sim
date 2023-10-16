@@ -187,7 +187,7 @@ def run_mouse_auto() :
                     mouse.move_auto(wall)
 
                 if mouse.goto_start == True :
-                    draw_message('Find Gole')
+                    draw_message('Find Goal')
             else :
                 if mouse.move_to_start() == True :
                     simulation_end = True
@@ -204,12 +204,20 @@ def run_mouse_auto() :
         clock.tick(10)
 
         if simulation_end == True :
-            draw_message('Arrive Start')
+            draw_message('Arrive at start point')
             return
 
 def start_mouse() :
     # Clear gamepad
     gctrl.gamepad.fill(COLOR_WHITE)
+
+    bg_img = pygame.image.load('image/mouse_bg.png')
+    # bg_img = pygame.transform.scale_by(bg_img, 0.6)
+
+    bg_rect = bg_img.get_rect()
+    bg_rect.left = gctrl.pad_width - bg_rect.width
+    bg_rect.top = gctrl.pad_height - bg_rect.height
+    gctrl.gamepad.blit(bg_img, bg_rect)
 
     font = pygame.font.Font('freesansbold.ttf', 20)
     text_suf = font.render("Micro Mouse Simulator", True, COLOR_BLACK)
