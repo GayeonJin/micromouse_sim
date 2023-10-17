@@ -77,6 +77,11 @@ def edit_maze() :
                     maze.save()
                 elif event.key == pygame.K_x :
                     return
+            elif event.type == pygame.MOUSEBUTTONUP :
+                mouse_pos = pygame.mouse.get_pos()
+                x, y = maze.get_pos(mouse_pos)
+                if x != None or y != None :
+                    cursor.set_pos(x, y) 
 
         # Move cursor
         if direction != 0 :
@@ -219,7 +224,7 @@ def start_mouse() :
     bg_rect.top = gctrl.pad_height - bg_rect.height
     gctrl.gamepad.blit(bg_img, bg_rect)
 
-    font = pygame.font.Font('freesansbold.ttf', 20)
+    font = pygame.font.Font('freesansbold.ttf', 40)
     text_suf = font.render("Micro Mouse Simulator", True, COLOR_BLACK)
     text_rect = text_suf.get_rect()
     text_rect.center = ((gctrl.pad_width / 2), (gctrl.pad_height / 2))
@@ -230,7 +235,7 @@ def start_mouse() :
                 't : test mouse',
                 'x : exit simualtion']
 
-    font1 = pygame.font.SysFont(None, 25)
+    font1 = pygame.font.SysFont(None, 30)
     for i, help in enumerate(help_str) :
         text_suf1 = font1.render(help, True, COLOR_BLUE)
         text_rect1 = text_suf1.get_rect()

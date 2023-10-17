@@ -25,6 +25,10 @@ class cursor_object :
     def get_cur_pos(self) :
         return [self.x, self.y]
 
+    def set_pos(self, x, y) :
+        self.x = x
+        self.y = y
+
     def move(self, direction) :
         if direction == CURSOR_MOVE_UP:
             self.y += 1

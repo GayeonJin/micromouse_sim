@@ -6,7 +6,7 @@ import random
 from time import sleep
 
 class game_ctrl :
-    def __init(self) :
+    def __init__(self) :
         self.gamepad = None 
         self.pad_width = 640
         self.pad_height = 320

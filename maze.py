@@ -47,6 +47,16 @@ class maze_object :
         pad_height = 2 * MAZE_YOFFSET + self.rows * MAZE_HEIGHT
         return (pad_width, pad_height) 
 
+    def get_pos(self, screen_xy) :
+        for y in range(self.rows) :
+            for x in range(self.cols) :
+                maze_rect = self.get_maze_rect(x, y)
+                if screen_xy[0] > maze_rect.left and screen_xy[0] < maze_rect.right :
+                    if screen_xy[1] > maze_rect.top and screen_xy[1] < maze_rect.bottom :      
+                        return (x, y)
+                    
+        return (None, None)
+
     def get_maze_rect(self, x, y) :
         maze_rect = pygame.Rect(MAZE_XOFFSET, MAZE_YOFFSET, MAZE_WIDTH, MAZE_HEIGHT)
 
