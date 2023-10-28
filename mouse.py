@@ -20,9 +20,12 @@ MOUSE_MOVE_UP = 8
 MOUSE_TYPE_CIRCLE = 1
 MOUSE_TYPE_IMG = 2
 
+MOUSE_NORMAL = 1
+MOUSE_RETURN = 2
+
 MOUSE_STATE_IDLE = 1
 MOUSE_STATE_SEARCH_GOAL = 2
-MOUSE_STATE_BAKC_TO_BRANCH = 3
+MOUSE_STATE_BACK_TO_BRANCH = 3
 MOUSE_STATE_MOVE_TO_NEXT = 4
 MOUSE_STATE_FIND_GOAL = 5
 MOUSE_STATE_BACK_TO_START = 6
@@ -45,6 +48,7 @@ class mouse_object :
         self.map = []
         
         self.mouse_obj = game_object(0, 0, get_img_resource('id_mouse'))
+        self.mouse_obj1 = game_object(0, 0, get_img_resource('id_mouse1'))
 
         self.init_variables()
 
@@ -151,8 +155,7 @@ class mouse_object :
             if gate & WALL_TOP :
                 next_pos.append(self.get_next_pos(MOUSE_MOVE_UP))
 
-        for pos in next_pos :
-            print('check branch : ', pos)
+        print('check branch : ', next_pos)
 
         if len(next_pos) >= 1 :
             res_pos = next_pos.pop(0)
@@ -172,8 +175,8 @@ class mouse_object :
         wall_filter = WALL_ALL & ~entrance
 
         if wall ^ wall_filter == 0 :
-            print("no next path, go to branch")
-            self.state = MOUSE_STATE_BAKC_TO_BRANCH
+            print("no next path, back to branch")
+            self.state = MOUSE_STATE_BACK_TO_BRANCH
             return False
         else :
             return True
@@ -197,7 +200,7 @@ class mouse_object :
             self.trace.append([self.x, self.y])
 
     def move_to_branch(self) :
-        if self.state != MOUSE_STATE_BAKC_TO_BRANCH : 
+        if self.state != MOUSE_STATE_BACK_TO_BRANCH : 
             return False
         
         if self.branch_dest == None :
@@ -231,7 +234,7 @@ class mouse_object :
         direction = self.get_direction(self.get_cur_pos(), self.branch_next)
         self.move_next(direction)
 
-        print("go to new branch", self.branch_next)
+        print("go to new path", self.branch_next)
 
         self.branch_dest = None
         self.branch_next = None
@@ -254,9 +257,6 @@ class mouse_object :
             return True
         
         return False
-
-    def move_to_goal(self) :
-        print('got to goal')
 
     def move_auto(self, wall) :
         if self.state != MOUSE_STATE_SEARCH_GOAL :
@@ -300,7 +300,7 @@ class mouse_object :
         else :
             return False
 
-    def draw_mouse(self, type = MOUSE_TYPE_CIRCLE, color = COLOR_BLACK) :
+    def draw_mouse(self, type = MOUSE_TYPE_CIRCLE, mode = MOUSE_NORMAL, color = COLOR_BLACK) :
         maze_rect = self.maze.get_maze_rect(self.x, self.y)
 
         if type == MOUSE_TYPE_CIRCLE :
@@ -314,7 +314,10 @@ class mouse_object :
             elif self.dir == MOUSE_MOVE_DOWN :
                 rotate_angle = 180
 
-            self.mouse_obj.draw_rect(maze_rect, rotate_angle)
+            if mode == MOUSE_NORMAL :
+                self.mouse_obj.draw_rect(maze_rect, rotate_angle)
+            elif mode == MOUSE_RETURN :
+                self.mouse_obj1.draw_rect(maze_rect, rotate_angle)
 
     def draw_map_prohibit(self) :
         for y in range(self.rows) :
@@ -325,8 +328,11 @@ class mouse_object :
 
     def draw(self) :
         maze_rect = self.maze.get_maze_rect(self.x, self.y)
-        self.draw_mouse(MOUSE_TYPE_IMG)
-        # self.draw_mouse(MOUSE_TYPE_CIRCLE, COLOR_RED)
+        if self.state == MOUSE_STATE_BACK_TO_BRANCH :
+            self.draw_mouse(MOUSE_TYPE_IMG, MOUSE_RETURN)
+        else :
+            self.draw_mouse(MOUSE_TYPE_IMG, MOUSE_NORMAL)
+            # self.draw_mouse(MOUSE_TYPE_CIRCLE, COLOR_RED)
 
 if __name__ == '__main__' :
     print('mouse object')
