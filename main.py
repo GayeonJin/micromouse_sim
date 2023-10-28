@@ -111,6 +111,7 @@ def run_mouse() :
 
     maze.load()
 
+    auto = False
     run_end = False
     while not run_end :
         dir = 0
@@ -130,6 +131,8 @@ def run_mouse() :
                     dir = MOUSE_MOVE_RIGHT
                 elif event.key == pygame.K_r :
                     auto = True
+                if event.key == pygame.K_SPACE:
+                    mouse.set_state(MOUSE_STATE_SEARCH_GOAL)                    
                 elif event.key == pygame.K_x :
                     return
 
@@ -141,15 +144,19 @@ def run_mouse() :
             mouse.move(dir)
 
         if auto == True :
-            if mouse.goto_start == False :
+            state = mouse.is_state()
+            if state == MOUSE_STATE_BACK_TO_START :
+                mouse.move_to_start()
+            elif state == MOUSE_STATE_FIND_GOAL:
+                mouse.set_state(MOUSE_STATE_BACK_TO_START)
+            else :
                 wall = mouse.sense_wall()
  
-                if mouse.check_next_path(wall) == False :
-                    mouse.move_to_branch()
-                else :
-                    mouse.move_auto(wall)
-            else :
-                mouse.move_to_start()
+                mouse.move_auto(wall)
+                mouse.move_to_next_path()                
+                mouse.move_to_branch()
+
+        auto = False
 
         # Draw maze
         maze.draw()
@@ -160,8 +167,6 @@ def run_mouse() :
 
         pygame.display.update()
         clock.tick(60)
-    
-    print('run_mouse : end')
 
 def run_mouse_auto() :
     global clock
@@ -178,25 +183,28 @@ def run_mouse_auto() :
             if event.type == pygame.QUIT :
                 run_end = True
 
+            if event.type == pygame.KEYUP :
+                if event.key == pygame.K_SPACE:
+                    mouse.set_state(MOUSE_STATE_SEARCH_GOAL)
+
         # Clear gamepad
         gctrl.gamepad.fill(COLOR_WHITE)
 
         # Move mouse
         if auto == True :
-            if mouse.goto_start == False :
-                wall = mouse.sense_wall()
- 
-                if mouse.check_next_path(wall) == False :
-                    mouse.move_to_branch()
-                else :
-                    mouse.move_auto(wall)
-
-                if mouse.goto_start == True :
-                    draw_message('Find Goal')
-            else :
+            state = mouse.is_state()
+            if state == MOUSE_STATE_BACK_TO_START :
                 if mouse.move_to_start() == True :
                     simulation_end = True
                     auto = False
+            elif state == MOUSE_STATE_FIND_GOAL:
+                mouse.set_state(MOUSE_STATE_BACK_TO_START)
+            else :
+                wall = mouse.sense_wall()
+ 
+                mouse.move_auto(wall)
+                mouse.move_to_next_path()                
+                mouse.move_to_branch()
 
         # Draw maze
         maze.draw()
@@ -204,6 +212,9 @@ def run_mouse_auto() :
         # Draw mouse
         mouse.draw_map_prohibit()
         mouse.draw()
+
+        if mouse.is_state() == MOUSE_STATE_FIND_GOAL :
+            draw_message('Find Goal')
 
         pygame.display.update()
         clock.tick(10)

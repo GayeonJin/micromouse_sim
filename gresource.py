@@ -11,6 +11,7 @@ resource_path = ''
 
 resource_image = {
     'id_background' : 'image/mouse_bg.png',
+    'id_mouse' : 'image/mouse.png'
 }
 
 def get_img_resource(resource_id) :
