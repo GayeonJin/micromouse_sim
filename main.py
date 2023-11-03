@@ -17,6 +17,10 @@ from cursor import *
 from maze import *
 from mouse import *
 
+INFO_HEIGHT = 40
+INFO_OFFSET = 10
+INFO_FONT = 20
+
 def draw_step(count) :
     font = pygame.font.SysFont(None, 25)
     text = font.render("Step : " + str(count), True, COLOR_WHITE)
@@ -31,6 +35,16 @@ def draw_message(str) :
     gctrl.gamepad.blit(text_suf, text_rect)
     pygame.display.update()
     sleep(2)
+
+def draw_info(mode) :
+    font = pygame.font.SysFont('Verdana', INFO_FONT)
+    if mode == 'edit' :
+        info = font.render('F1 : load map   F2 : save map   a : left    d : right   s : down    w : up', True, COLOR_BLACK)
+    elif mode == 'run' :
+        info = font.render('space : go', True, COLOR_BLACK)
+
+    pygame.draw.rect(gctrl.gamepad, COLOR_GRAY, (0, gctrl.pad_height - INFO_HEIGHT, gctrl.pad_width, INFO_HEIGHT))
+    gctrl.gamepad.blit(info, (INFO_OFFSET * 2, gctrl.pad_height - INFO_FONT - INFO_OFFSET))
 
 def terminate() :
     pygame.quit()
@@ -71,9 +85,9 @@ def edit_maze() :
                     edit_wall = WALL_RIGHT
                 elif event.key == pygame.K_w :
                     edit_wall = WALL_TOP
-                elif event.key == pygame.K_1 :               
+                elif event.key == pygame.K_F1 :               
                     maze.load()
-                elif event.key == pygame.K_2 :
+                elif event.key == pygame.K_F2 :
                     maze.save()
                 elif event.key == pygame.K_x :
                     return
@@ -101,6 +115,9 @@ def edit_maze() :
 
         # Draw cursor
         cursor.draw_circle(COLOR_BLACK)
+
+        # Draw Info
+        draw_info('edit')
 
         pygame.display.update()
         clock.tick(60)
@@ -216,6 +233,9 @@ def run_mouse_auto() :
         if mouse.is_state() == MOUSE_STATE_FIND_GOAL :
             draw_message('Find Goal')
 
+        # Draw Info
+        draw_info('run')
+
         pygame.display.update()
         clock.tick(10)
 
@@ -283,11 +303,12 @@ def init_mouse() :
 
     # maze
     maze = maze_object(MAX_ROWS, MAX_COLS)
-    (pad_width, pad_height) = maze.get_padsize()
 
     # mouse
     mouse = mouse_object(maze)
 
+    (pad_width, pad_height) = maze.get_padsize()
+    pad_height += INFO_HEIGHT
     gctrl.set_param(pygame.display.set_mode((pad_width, pad_height)), pad_width, pad_height)
     pygame.display.set_caption("Micro Mouse Simulator")
 
