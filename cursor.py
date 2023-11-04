@@ -7,7 +7,6 @@ import pygame
 import random
 
 from gresource import *
-from gobject import *
 from maze import *
 
 CURSOR_MOVE_LEFT = 1

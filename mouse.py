@@ -7,7 +7,6 @@ import pygame
 import random
 
 from gresource import *
-from gobject import *
 from maze import *
 
 MOUSE_SIZE = 5
@@ -47,8 +46,8 @@ class mouse_object :
         self.branch = []
         self.map = []
         
-        self.mouse_obj = game_object(0, 0, get_img_resource('id_mouse'))
-        self.mouse_obj1 = game_object(0, 0, get_img_resource('id_mouse1'))
+        self.mouse_img1 = pygame.image.load(get_img_resource('id_mouse'))
+        self.mouse_img2 = pygame.image.load(get_img_resource('id_mouse1'))
 
         self.init_variables()
 
@@ -315,9 +314,11 @@ class mouse_object :
                 rotate_angle = 180
 
             if mode == MOUSE_NORMAL :
-                self.mouse_obj.draw_rect(maze_rect, rotate_angle)
+                rotate_img = pygame.transform.rotate(self.mouse_img1, rotate_angle)
             elif mode == MOUSE_RETURN :
-                self.mouse_obj1.draw_rect(maze_rect, rotate_angle)
+                rotate_img = pygame.transform.rotate(self.mouse_img2, rotate_angle)
+            
+            gctrl.surface.blit(rotate_img, maze_rect)
 
     def draw_map_prohibit(self) :
         for y in range(self.rows) :

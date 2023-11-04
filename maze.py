@@ -7,7 +7,6 @@ import pygame
 import random
 
 from gresource import *
-from gobject import *
 
 MAX_ROWS = 16
 MAX_COLS = 16

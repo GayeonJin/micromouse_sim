@@ -12,7 +12,6 @@ from tkinter import filedialog
 from tkinter import *
 
 from gresource import *
-from gobject import *
 from cursor import *
 from maze import *
 from mouse import *
