@@ -6,6 +6,7 @@ import csv
 import pygame
 import random
 
+from gresource import *
 from gobject import *
 from maze import *
 
@@ -49,11 +50,11 @@ class cursor_object :
 
     def draw_rect(self, color) :
         cursor_rect = self.maze.get_maze_rect(self.x, self.y)
-        pygame.draw.rect(gctrl.gamepad, color, cursor_rect)
+        pygame.draw.rect(gctrl.surface, color, cursor_rect)
 
     def draw_circle(self, color) :
         cursor_rect = self.maze.get_maze_rect(self.x, self.y)
-        pygame.draw.circle(gctrl.gamepad, color, cursor_rect.center, 5, 2)
+        pygame.draw.circle(gctrl.surface, color, cursor_rect.center, 5, 2)
 
 if __name__ == '__main__' :
     print('cursor object')

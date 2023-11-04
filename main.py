@@ -24,27 +24,27 @@ INFO_FONT = 20
 def draw_step(count) :
     font = pygame.font.SysFont(None, 25)
     text = font.render("Step : " + str(count), True, COLOR_WHITE)
-    gctrl.gamepad.blit(text, (gctrl.pad_width - 100, 0))
+    gctrl.surface.blit(text, (gctrl.width - 100, 0))
 
 def draw_message(str) :
     font = pygame.font.Font('freesansbold.ttf', 40)
     text_suf = font.render(str, True, COLOR_BLACK)
     text_rect = text_suf.get_rect()
-    text_rect.center = ((gctrl.pad_width / 2), (gctrl.pad_height / 2))
+    text_rect.center = ((gctrl.width / 2), (gctrl.height / 2))
 
-    gctrl.gamepad.blit(text_suf, text_rect)
+    gctrl.surface.blit(text_suf, text_rect)
     pygame.display.update()
     sleep(2)
 
 def draw_info(mode) :
     font = pygame.font.SysFont('Verdana', INFO_FONT)
     if mode == 'edit' :
-        info = font.render('F1 : load map   F2 : save map   a : left    d : right   s : down    w : up', True, COLOR_BLACK)
+        info = font.render('F1/F2 : load/save map   a/d/s/w : left/right/down/up    x : exit', True, COLOR_BLACK)
     elif mode == 'run' :
         info = font.render('space : go', True, COLOR_BLACK)
 
-    pygame.draw.rect(gctrl.gamepad, COLOR_GRAY, (0, gctrl.pad_height - INFO_HEIGHT, gctrl.pad_width, INFO_HEIGHT))
-    gctrl.gamepad.blit(info, (INFO_OFFSET * 2, gctrl.pad_height - INFO_FONT - INFO_OFFSET))
+    pygame.draw.rect(gctrl.surface, COLOR_GRAY, (0, gctrl.height - INFO_HEIGHT, gctrl.width, INFO_HEIGHT))
+    gctrl.surface.blit(info, (INFO_OFFSET * 2, gctrl.height - INFO_FONT - INFO_OFFSET))
 
 def terminate() :
     pygame.quit()
@@ -107,8 +107,8 @@ def edit_maze() :
             maze.edit_wall(cursor.x, cursor.y, edit_wall)
             edit_wall = 0
             
-        # Clear gamepad
-        gctrl.gamepad.fill(COLOR_WHITE)
+        # Clear surface
+        gctrl.surface.fill(COLOR_WHITE)
 
         # Draw maze
         maze.draw()
@@ -153,8 +153,8 @@ def run_mouse() :
                 elif event.key == pygame.K_x :
                     return
 
-        # Clear gamepad
-        gctrl.gamepad.fill(COLOR_WHITE)
+        # Clear surface
+        gctrl.surface.fill(COLOR_WHITE)
 
         # Move mouse
         if dir != 0 :
@@ -204,8 +204,8 @@ def run_mouse_auto() :
                 if event.key == pygame.K_SPACE:
                     mouse.set_state(MOUSE_STATE_SEARCH_GOAL)
 
-        # Clear gamepad
-        gctrl.gamepad.fill(COLOR_WHITE)
+        # Clear surface
+        gctrl.surface.fill(COLOR_WHITE)
 
         # Move mouse
         if auto == True :
@@ -244,22 +244,22 @@ def run_mouse_auto() :
             return
 
 def start_mouse() :
-    # Clear gamepad
-    gctrl.gamepad.fill(COLOR_WHITE)
+    # Clear surface
+    gctrl.surface.fill(COLOR_WHITE)
 
     bg_img = pygame.image.load('image/mouse_bg.png')
     # bg_img = pygame.transform.scale_by(bg_img, 0.6)
 
     bg_rect = bg_img.get_rect()
-    bg_rect.left = gctrl.pad_width - bg_rect.width
-    bg_rect.top = gctrl.pad_height - bg_rect.height
-    gctrl.gamepad.blit(bg_img, bg_rect)
+    bg_rect.left = gctrl.width - bg_rect.width
+    bg_rect.top = gctrl.height - bg_rect.height
+    gctrl.surface.blit(bg_img, bg_rect)
 
     font = pygame.font.Font('freesansbold.ttf', 40)
     text_suf = font.render("Micro Mouse Simulator", True, COLOR_BLACK)
     text_rect = text_suf.get_rect()
-    text_rect.center = ((gctrl.pad_width / 2), (gctrl.pad_height / 2))
-    gctrl.gamepad.blit(text_suf, text_rect)
+    text_rect.center = ((gctrl.width / 2), (gctrl.height / 2))
+    gctrl.surface.blit(text_suf, text_rect)
 
     help_str = ['e : edit maze',
                 'g : go mouse',
@@ -271,8 +271,8 @@ def start_mouse() :
         text_suf1 = font1.render(help, True, COLOR_BLUE)
         text_rect1 = text_suf1.get_rect()
         text_rect1.top = text_rect.bottom + 50 + i * 25
-        text_rect1.centerx = gctrl.pad_width / 2
-        gctrl.gamepad.blit(text_suf1, text_rect1)
+        text_rect1.centerx = gctrl.width / 2
+        gctrl.surface.blit(text_suf1, text_rect1)
 
     while True :
         for event in pygame.event.get():
@@ -309,7 +309,7 @@ def init_mouse() :
 
     (pad_width, pad_height) = maze.get_padsize()
     pad_height += INFO_HEIGHT
-    gctrl.set_param(pygame.display.set_mode((pad_width, pad_height)), pad_width, pad_height)
+    gctrl.set_surface(pygame.display.set_mode((pad_width, pad_height)))
     pygame.display.set_caption("Micro Mouse Simulator")
 
 if __name__ == '__main__' :

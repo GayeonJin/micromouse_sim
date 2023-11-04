@@ -75,13 +75,13 @@ class maze_object :
         for y in range(self.rows) :
             for x in range(self.cols) :
                 if self.maze[x][y] & WALL_LEFT :
-                    pygame.draw.line(gctrl.gamepad, WALL_COLOR, (maze_rect.left, maze_rect.top), (maze_rect.left, maze_rect.bottom), WALL_WIDTH)
+                    pygame.draw.line(gctrl.surface, WALL_COLOR, (maze_rect.left, maze_rect.top), (maze_rect.left, maze_rect.bottom), WALL_WIDTH)
                 if self.maze[x][y] & WALL_BOTTOM :
-                    pygame.draw.line(gctrl.gamepad, WALL_COLOR, (maze_rect.left, maze_rect.bottom), (maze_rect.right, maze_rect.bottom), WALL_WIDTH)
+                    pygame.draw.line(gctrl.surface, WALL_COLOR, (maze_rect.left, maze_rect.bottom), (maze_rect.right, maze_rect.bottom), WALL_WIDTH)
                 if self.maze[x][y] & WALL_RIGHT :
-                    pygame.draw.line(gctrl.gamepad, WALL_COLOR, (maze_rect.right, maze_rect.bottom), (maze_rect.right, maze_rect.top), WALL_WIDTH)
+                    pygame.draw.line(gctrl.surface, WALL_COLOR, (maze_rect.right, maze_rect.bottom), (maze_rect.right, maze_rect.top), WALL_WIDTH)
                 if self.maze[x][y] & WALL_TOP :
-                    pygame.draw.line(gctrl.gamepad, WALL_COLOR, (maze_rect.right, maze_rect.top), (maze_rect.left, maze_rect.top), WALL_WIDTH)
+                    pygame.draw.line(gctrl.surface, WALL_COLOR, (maze_rect.right, maze_rect.top), (maze_rect.left, maze_rect.top), WALL_WIDTH)
 
                 maze_rect.x += MAZE_WIDTH
             maze_rect.y -= MAZE_HEIGHT

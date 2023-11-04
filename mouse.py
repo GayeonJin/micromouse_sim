@@ -304,7 +304,7 @@ class mouse_object :
         maze_rect = self.maze.get_maze_rect(self.x, self.y)
 
         if type == MOUSE_TYPE_CIRCLE :
-            pygame.draw.circle(gctrl.gamepad, color, maze_rect.center, MOUSE_SIZE, 2)
+            pygame.draw.circle(gctrl.surface, color, maze_rect.center, MOUSE_SIZE, 2)
         elif type == MOUSE_TYPE_IMG :
             rotate_angle = 0
             if self.dir == MOUSE_MOVE_LEFT :
@@ -324,7 +324,7 @@ class mouse_object :
             for x in range(self.cols) :
                 if self.map[x][y] == WALL_ALL :
                     maze_rect = self.maze.get_maze_rect(x, y)
-                    pygame.draw.circle(gctrl.gamepad, COLOR_BLUE, maze_rect.center, 1, 2)                    
+                    pygame.draw.circle(gctrl.surface, COLOR_BLUE, maze_rect.center, 1, 2)                    
 
     def draw(self) :
         maze_rect = self.maze.get_maze_rect(self.x, self.y)

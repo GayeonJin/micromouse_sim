@@ -19,5 +19,18 @@ resource_image = {
 def get_img_resource(resource_id) :
     return resource_path + resource_image[resource_id]
 
+class game_ctrl :
+    def __init__(self) :
+        self.surface = None 
+        self.width = 640
+        self.height = 320
+
+    def set_surface(self, surface) :
+        self.surface = surface
+        self.width = surface.get_width()
+        self.height = surface.get_height()
+
+gctrl = game_ctrl()
+
 if __name__ == '__main__' :
-    print('resoure')
+    print('main surface and resoure')
