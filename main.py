@@ -16,6 +16,8 @@ from cursor import *
 from maze import *
 from mouse import *
 
+PREFIX_STR = 'MicroMouse'
+
 INFO_HEIGHT = 40
 INFO_OFFSET = 10
 INFO_FONT = 20
@@ -40,7 +42,7 @@ def draw_info(mode) :
     if mode == 'edit' :
         info = font.render('F1/F2 : load/save map   a/d/s/w : left/right/down/up    x : exit', True, COLOR_BLACK)
     elif mode == 'run' :
-        info = font.render('space : go', True, COLOR_BLACK)
+        info = font.render('space : go  F10 : capture image', True, COLOR_BLACK)
 
     pygame.draw.rect(gctrl.surface, COLOR_GRAY, (0, gctrl.height - INFO_HEIGHT, gctrl.width, INFO_HEIGHT))
     gctrl.surface.blit(info, (INFO_OFFSET * 2, gctrl.height - INFO_FONT - INFO_OFFSET))
@@ -84,17 +86,19 @@ def edit_maze() :
                     edit_wall = WALL_RIGHT
                 elif event.key == pygame.K_w :
                     edit_wall = WALL_TOP
-                elif event.key == pygame.K_F1 :               
+                elif event.key == pygame.K_F1 :      
                     maze.load()
                 elif event.key == pygame.K_F2 :
                     maze.save()
+                elif event.key == pygame.K_F10 :
+                    gctrl.save_scr_capture(PREFIX_STR)
                 elif event.key == pygame.K_x :
                     return
             elif event.type == pygame.MOUSEBUTTONUP :
                 mouse_pos = pygame.mouse.get_pos()
                 x, y = maze.get_pos(mouse_pos)
                 if x != None or y != None :
-                    cursor.set_pos(x, y) 
+                    cursor.set_pos(x, y)
 
         # Move cursor
         if direction != 0 :
@@ -148,7 +152,9 @@ def run_mouse() :
                 elif event.key == pygame.K_r :
                     auto = True
                 if event.key == pygame.K_SPACE:
-                    mouse.set_state(MOUSE_STATE_SEARCH_GOAL)                    
+                    mouse.set_state(MOUSE_STATE_SEARCH_GOAL)
+                elif event.key == pygame.K_F10 :               
+                    gctrl.save_scr_capture(PREFIX_STR)
                 elif event.key == pygame.K_x :
                     return
 
@@ -202,6 +208,8 @@ def run_mouse_auto() :
             if event.type == pygame.KEYUP :
                 if event.key == pygame.K_SPACE:
                     mouse.set_state(MOUSE_STATE_SEARCH_GOAL)
+                elif event.key == pygame.K_F10 :               
+                    gctrl.save_scr_capture(PREFIX_STR)
 
         # Clear surface
         gctrl.surface.fill(COLOR_WHITE)

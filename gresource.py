@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import sys
+import time
+import pygame
 
 COLOR_BLACK = (0, 0, 0)
 COLOR_GRAY = (128, 128, 128)
@@ -29,6 +31,9 @@ class game_ctrl :
         self.surface = surface
         self.width = surface.get_width()
         self.height = surface.get_height()
+
+    def save_scr_capture(self, prefix) :
+        pygame.image.save(self.surface,(prefix + time.strftime('%Y%m%d%H%M%S')+ '.jpg'))
 
 gctrl = game_ctrl()
 
