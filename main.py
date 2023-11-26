@@ -16,6 +16,7 @@ from cursor import *
 from maze import *
 from mouse import *
 
+TITLE_STR = "Micro Mouse Simulator"
 PREFIX_STR = 'MicroMouse'
 
 INFO_HEIGHT = 40
@@ -23,17 +24,11 @@ INFO_OFFSET = 10
 INFO_FONT = 20
 
 def draw_step(count) :
-    font = pygame.font.SysFont(None, 25)
-    text = font.render("Step : " + str(count), True, COLOR_WHITE)
-    gctrl.surface.blit(text, (gctrl.width - 100, 0))
+    gctrl.draw_string("Step : " + str(count), 100, 0, ALIGN_RIGHT)
 
 def draw_message(str) :
-    font = pygame.font.Font('freesansbold.ttf', 40)
-    text_suf = font.render(str, True, COLOR_BLACK)
-    text_rect = text_suf.get_rect()
-    text_rect.center = ((gctrl.width / 2), (gctrl.height / 2))
+    gctrl.draw_string(str, 0, 0, ALIGN_CENTER, 40, COLOR_BLACK)
 
-    gctrl.surface.blit(text_suf, text_rect)
     pygame.display.update()
     sleep(2)
 
@@ -52,8 +47,6 @@ def terminate() :
     sys.exit()
 
 def edit_maze() :
-    global root
-    global clock
     global maze
 
     cursor = cursor_object(maze)
@@ -123,10 +116,9 @@ def edit_maze() :
         draw_info('edit')
 
         pygame.display.update()
-        clock.tick(60)
+        gctrl.clock.tick(FPS)
 
 def run_mouse() :
-    global clock
     global maze, mouse
 
     maze.load()
@@ -188,10 +180,9 @@ def run_mouse() :
         mouse.draw()
 
         pygame.display.update()
-        clock.tick(60)
+        gctrl.clock.tick(FPS)
 
 def run_mouse_auto() :
-    global clock
     global maze, mouse
 
     maze.load()
@@ -244,7 +235,7 @@ def run_mouse_auto() :
         draw_info('run')
 
         pygame.display.update()
-        clock.tick(10)
+        gctrl.clock.tick(10)
 
         if simulation_end == True :
             draw_message('Arrive at start point')
@@ -262,24 +253,16 @@ def start_mouse() :
     bg_rect.top = gctrl.height - bg_rect.height
     gctrl.surface.blit(bg_img, bg_rect)
 
-    font = pygame.font.Font('freesansbold.ttf', 40)
-    text_suf = font.render("Micro Mouse Simulator", True, COLOR_BLACK)
-    text_rect = text_suf.get_rect()
-    text_rect.center = ((gctrl.width / 2), (gctrl.height / 2))
-    gctrl.surface.blit(text_suf, text_rect)
+    gctrl.draw_string(TITLE_STR, 0, 0, ALIGN_CENTER, 50, COLOR_BLACK)
 
     help_str = ['e : edit maze',
                 'g : go mouse',
                 't : test mouse',
                 'x : exit simualtion']
 
-    font1 = pygame.font.SysFont(None, 30)
     for i, help in enumerate(help_str) :
-        text_suf1 = font1.render(help, True, COLOR_BLUE)
-        text_rect1 = text_suf1.get_rect()
-        text_rect1.top = text_rect.bottom + 50 + i * 25
-        text_rect1.centerx = gctrl.width / 2
-        gctrl.surface.blit(text_suf1, text_rect1)
+        y_offset = 150 + i * 30
+        gctrl.draw_string(help, 0, y_offset, ALIGN_CENTER | ALIGN_BOTTOM, 30, COLOR_BLUE)
 
     while True :
         for event in pygame.event.get():
@@ -298,15 +281,10 @@ def start_mouse() :
                     terminate()
 
         pygame.display.update()
-        clock.tick(60)    
+        gctrl.clock.tick(FPS)    
        
 def init_mouse() :
-    global root
-    global clock
     global maze, mouse
-
-    pygame.init()
-    clock = pygame.time.Clock()
 
     # maze
     maze = maze_object(MAX_ROWS, MAX_COLS)
@@ -317,7 +295,7 @@ def init_mouse() :
     (pad_width, pad_height) = maze.get_padsize()
     pad_height += INFO_HEIGHT
     gctrl.set_surface(pygame.display.set_mode((pad_width, pad_height)))
-    pygame.display.set_caption("Micro Mouse Simulator")
+    pygame.display.set_caption(TITLE_STR)
 
 if __name__ == '__main__' :
     init_mouse()
