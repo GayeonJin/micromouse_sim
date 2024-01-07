@@ -255,33 +255,30 @@ def start_mouse() :
 
     gctrl.draw_string(TITLE_STR, 0, 0, ALIGN_CENTER, 50, COLOR_BLACK)
 
-    help_str = ['e : edit maze',
-                'g : go mouse',
-                't : test mouse',
-                'x : exit simualtion']
+    menus = {
+        pygame.K_e : ['edit', 'e : edit maze'],
+        pygame.K_g : ['run', 'g : go mouse'],
+        pygame.K_t : ['test', 't : test mouse'],
+        pygame.K_x : ['exit', 'x : exit simualtion'],
+    }
 
-    for i, help in enumerate(help_str) :
+    for i, key in enumerate(menus) :
         y_offset = 150 + i * 30
-        gctrl.draw_string(help, 0, y_offset, ALIGN_CENTER | ALIGN_BOTTOM, 30, COLOR_BLUE)
+        gctrl.draw_string(menus[key][1], 0, y_offset, ALIGN_CENTER | ALIGN_BOTTOM, 30, COLOR_BLUE)
 
     while True :
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_x :
                     terminate()
-                elif event.key == pygame.K_e :
-                    return 'edit'
-                elif event.key == pygame.K_g :
-                    return 'run'
-                elif event.key == pygame.K_t :
-                    return 'test'
-                elif event.key == pygame.K_x :
-                    terminate()
-
+                else :
+                    if event.key in menus :
+                        return menus[event.key][0]                    
+ 
         pygame.display.update()
-        gctrl.clock.tick(FPS)    
+        gctrl.clock.tick(FPS)
        
 def init_mouse() :
     global maze, mouse
